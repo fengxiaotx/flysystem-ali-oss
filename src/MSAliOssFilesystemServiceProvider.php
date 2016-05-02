@@ -15,10 +15,16 @@ use Illuminate\Support\ServiceProvider;
 
 class MSAliOssFilesystemServiceProvider extends ServiceProvider
 {
+    protected $defer = false;
+
     public function register()
     {
+
+    }
+
+    public function boot(){
         Storage::extend('oss',function($app, $config){
-            
+
         });
     }
 }
