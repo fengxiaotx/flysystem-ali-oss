@@ -47,11 +47,15 @@ class MSAliOssAdapter extends AbstractAdapter
     public function getTimestamp($path){}
 
 
-    public function write($path, $contents, Config $config){
-        return $this->client->putObject();
+    public function write($path, $contents, Config $config = null){
+        $object = $this->applyPathPrefix($path);
+        return $this->client->uploadFile($this->bucket,$object,$contents);
     }
 
-    public function writeStream($path, $resource, Config $config){}
+    public function writeStream($path, $resource, Config $config = null){
+        $object = $this->applyPathPrefix($path);
+        return $this->client->putObject($this->bucket,$object,$resource);
+    }
 
     public function update($path, $contents, Config $config){
 
@@ -61,9 +65,16 @@ class MSAliOssAdapter extends AbstractAdapter
 
     public function rename($path, $newPath){}
 
-    public function copy($path, $newPath){}
+    public function copy($path, $newPath){
+        $fromPath = $this->applyPathPrefix($path);
+        $toPath = $this->applyPathPrefix($newPath);
+        return $this->client->copyObject($this->bucket,$this->bucket,$fromPath,$toPath);
+    }
 
-    public function delete($path){}
+    public function delete($path){
+        $object = $this->applyPathPrefix($path);
+        return $this->client->deleteObject($this->bucket,$object);
+    }
 
     public function deleteDir($dirname){}
 
