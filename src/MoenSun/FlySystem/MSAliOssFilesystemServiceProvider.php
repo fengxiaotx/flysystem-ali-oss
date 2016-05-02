@@ -29,7 +29,7 @@ class MSAliOssFilesystemServiceProvider extends ServiceProvider
 
             $client = new OssClient($config['OSS_ACCESS_ID'],$config['OSS_ACCESS_KEY'],$config['OSS_ENDPOINT'],$config['IS_CNAME'],$config['SECURITY_TOKEN']);
             
-            return new Filesystem(new MSAliOssAdapter($client));
+            return new Filesystem(new MSAliOssAdapter($client,$config['BUCKET'],isset($config['PREFIX'])?$config['PREFIX']:null));
         });
     }
 }
