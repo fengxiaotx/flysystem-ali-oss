@@ -12,6 +12,8 @@ namespace MoenSun\FlySystem;
 
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\ServiceProvider;
+use League\Flysystem\Filesystem;
+use OSS\OssClient;
 
 class MSAliOssFilesystemServiceProvider extends ServiceProvider
 {
@@ -25,6 +27,9 @@ class MSAliOssFilesystemServiceProvider extends ServiceProvider
     public function boot(){
         Storage::extend('oss',function($app, $config){
 
+            $client = new OssClient($config['OSS_ACCESS_ID'],$config['OSS_ACCESS_KEY'],$config['OSS_ENDPOINT'],$config['IS_CNAME'],$config['SECURITY_TOKEN']);
+            
+            return new Filesystem(new MSAliOssAdapter($client));
         });
     }
 }
