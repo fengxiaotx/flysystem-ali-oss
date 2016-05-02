@@ -20,10 +20,13 @@ class MSAliOssAdapter extends AbstractAdapter
     use NotSupportingVisibilityTrait;
 
     protected $client;
-    
+
+    protected $bucket;
+
     public function __construct(OssClient $client,$bucket, $prefix = null)
     {
         $this->client = $client;
+        $this->bucket = $bucket;
         $this->pathPrefix = $prefix;
     }
 
