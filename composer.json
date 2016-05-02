@@ -1,0 +1,19 @@
+{
+    "name": "moensun/flysystem-ali-oss",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Bane.Shi",
+            "email": "fengxiaotx@163.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "league/flysystem": "^1.0",
+        "aliyuncs/oss-sdk-php": "^2.0"
+    },
+    "require-dev": {
+        "laravel/framework": "^5.2"
+    }
+}
