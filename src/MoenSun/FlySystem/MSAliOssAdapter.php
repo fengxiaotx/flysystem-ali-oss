@@ -51,7 +51,7 @@ class MSAliOssAdapter extends AbstractAdapter
 
     public function write($path, $contents, Config $config = null){
         $object = $this->applyPathPrefix($path);
-        if(is_file($object)){
+        if(is_file($contents)){
             return $this->client->uploadFile($this->bucket,$object,$contents);
         }else {
             return $this->client->putObject($this->bucket,$object,$contents);
@@ -65,7 +65,8 @@ class MSAliOssAdapter extends AbstractAdapter
     }
 
     public function update($path, $contents, Config $config){
-
+        $this->delete($path);
+        $this->write($path,$contents,$config);
     }
 
     public function updateStream($path, $resource, Config $config){}
