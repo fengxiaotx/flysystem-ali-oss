@@ -27,10 +27,13 @@ class MSAliOssAdapter extends AbstractAdapter
     {
         $this->client = $client;
         $this->bucket = $bucket;
-        $this->pathPrefix = $prefix;
+        $this->setPathPrefix($prefix);
     }
 
-    public function has($path){}
+    public function has($path){
+        $object = $this->applyPathPrefix($path);
+        return $this->client->doesObjectExist($this->bucket,$object);
+    }
 
     public function read($path){}
 
@@ -46,10 +49,14 @@ class MSAliOssAdapter extends AbstractAdapter
 
     public function getTimestamp($path){}
 
-
     public function write($path, $contents, Config $config = null){
         $object = $this->applyPathPrefix($path);
-        return $this->client->uploadFile($this->bucket,$object,$contents);
+        if(is_file($object)){
+            return $this->client->uploadFile($this->bucket,$object,$contents);
+        }else {
+            return $this->client->putObject($this->bucket,$object,$contents);
+        }
+
     }
 
     public function writeStream($path, $resource, Config $config = null){
