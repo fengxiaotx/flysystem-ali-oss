@@ -51,7 +51,7 @@ class MSAliOssAdapter extends AbstractAdapter
 
     public function write($path, $contents, Config $config = null){
         $object = $this->applyPathPrefix($path);
-        if(is_file($contents)){
+        if(self::isValidPath($contents)){
             return $this->client->uploadFile($this->bucket,$object,$contents);
         }else {
             return $this->client->putObject($this->bucket,$object,$contents);
@@ -87,6 +87,12 @@ class MSAliOssAdapter extends AbstractAdapter
     public function deleteDir($dirname){}
 
     public function createDir($dirname, Config $config){}
+
+
+
+    private function isValidPath($path){
+        return preg_match('/(^\/\.*)|(^[a-zA-Z])\:\.*/',$path) && is_file($path);
+    }
 
 
 }
