@@ -52,11 +52,11 @@ class MSAliOssAdapter extends AbstractAdapter
     public function write($path, $contents, Config $config = null){
         $object = $this->applyPathPrefix($path);
         if(self::isValidPath($contents)){
-            return $this->client->uploadFile($this->bucket,$object,$contents);
+			$this->client->uploadFile($this->bucket,$object,$contents);
         }else {
-            return $this->client->putObject($this->bucket,$object,$contents);
+			$this->client->putObject($this->bucket,$object,$contents);
         }
-
+		return $path;
     }
 
     public function writeStream($path, $resource, Config $config = null){
@@ -66,19 +66,21 @@ class MSAliOssAdapter extends AbstractAdapter
 			while (!feof($resource)){
 				$f.= fgets($resource);
 			}
-			return $this->client->putObject($this->bucket,$object,$f);
+			$this->client->putObject($this->bucket,$object,$f);
 		}else{
-			return $this->client->putObject($this->bucket,$object,$resource);
+			$this->client->putObject($this->bucket,$object,$resource);
 		}
+		return $path;
     }
 
     public function update($path, $contents, Config $config){
         $this->delete($path);
-        $this->write($path,$contents,$config);
+        return $this->write($path,$contents,$config);
     }
 
     public function updateStream($path, $resource, Config $config){
-		$this->writeStream($path,$resource,$config);
+		$this->delete($path);
+    	return $this->writeStream($path,$resource,$config);
 	}
 
     public function rename($path, $newPath){}
